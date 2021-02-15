@@ -13,6 +13,8 @@ function show_pokemon() {
     let header_desc = pokemon_desc.querySelector('.screen__header');
     let main_screen = pokemon_desc.querySelector('.main-screen');
 
+    let old_type;
+    let new_type;
     containers.forEach((e) => {
         e.addEventListener("click", () => {
             let pointIndex = e.textContent.indexOf('.');
@@ -20,20 +22,36 @@ function show_pokemon() {
             let id = e.textContent.slice(0, pointIndex);
             header_desc.querySelector('.poke-name').textContent = name;
             header_desc.querySelector('.poke-id').textContent = id;
+            main_screen.classList.remove('hide');
 
 
+            
+            // Modify background color start
             fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
                 .then(function (response) {
                     if (response.status == 200) {
                         response.json()
                             .then(function (data) {
+
                                 let pokemon_type = data.types[0].type.name;
-                                console.log(pokemon_type);
-                                main_screen.classList.remove('hide');
-                                main_screen.classList.add(pokemon_type)
+                                old_type = new_type;
+                                new_type = pokemon_type;
+
+
+                                if (new_type !== old_type) {
+                                    main_screen.classList.add(new_type);
+                                    main_screen.classList.remove(old_type);
+                                }
+
                             })
                     }
                 })
+                .catch(function (error) {
+                    console.log(error);
+                })
+
+            // Modify background color end
+
 
 
 
