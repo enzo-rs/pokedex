@@ -18,7 +18,13 @@ function show_pokemon() {
     let pokemon_desc = document.querySelector('.main-section__black');
     let header_desc = pokemon_desc.querySelector('.screen__header');
     let main_screen = pokemon_desc.querySelector('.main-screen');
+    let stats = pokemon_desc.querySelector('.screen__stats');
+    let stats_weight = stats.querySelector('.stats__weight');
+    let stats_height = stats.querySelector('.stats__height');
+    let type_one = pokemon_desc.querySelector('.poke-type-one');
+    let type_two = pokemon_desc.querySelector('.poke-type-two');
 
+    console.log(stats_weight);
     let old_type;
     let new_type;
     containers.forEach((e) => {
@@ -49,6 +55,32 @@ function show_pokemon() {
                                     main_screen.classList.remove(old_type);
                                 }
 
+
+                                // Add weight and height start
+                                let weight = data.weight;
+                                let height = data.height;
+                                stats_weight.innerHTML = `weight: ${weight}`
+                                stats_height.innerHTML = `height: ${height}`
+                                // Add weight and height end
+
+
+                                // Add types start
+                                if (type_two.classList.contains('hide')) {
+                                    type_two.classList.remove('hide')
+                                }
+                                let type1 = data.types[0].type.name;
+                                type_one.textContent = type1;
+
+
+                                if (data.types.length === 2) {
+                                    let type2 = data.types[1].type.name;
+                                    type_two.textContent = type2;
+                                } else {
+                                    type_two.classList.add('hide')
+                                }
+
+                                // Add types end
+
                             })
                     }
                 })
@@ -57,6 +89,7 @@ function show_pokemon() {
                 })
 
             // Modify background color end
+
 
 
 
@@ -169,11 +202,11 @@ class PokemonObject {
 
 // Next and Prev Buttons start
 function buttons(new_prev, new_next) {
-    
-    
-    
 
-    
+
+
+
+
 
     // if (new_next !== null) {
     //     nextButton.addEventListener('click', () => {
@@ -181,7 +214,7 @@ function buttons(new_prev, new_next) {
     //     })
     //     console.log(new_next);
     // }
-   
+
 
 }
 
@@ -196,35 +229,35 @@ function buttons(new_prev, new_next) {
 
 function printPokemons(url) {
     fetch(url)
-    .then(function (response) {
-        if (response.status == 200) {
-            response.json()
-                .then(function (data) {
+        .then(function (response) {
+            if (response.status == 200) {
+                response.json()
+                    .then(function (data) {
 
-                    let pokemon_tab = data.results;
-                    
-                    let pokemonObj = new PokemonObject(pokemon_tab);
-                    pokemonObj.createPokemons()
+                        let pokemon_tab = data.results;
+
+                        let pokemonObj = new PokemonObject(pokemon_tab);
+                        pokemonObj.createPokemons()
 
 
-                    prev = data.previous;
-                    next = data.next;
-                    let old_prev;
-                    let old_next;
+                        prev = data.previous;
+                        next = data.next;
+                        let old_prev;
+                        let old_next;
 
-                    buttons(prev, next);
-                    show_pokemon()
-                    
+                        buttons(prev, next);
+                        show_pokemon()
 
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    })
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
 
 prevButton.addEventListener('click', () => {
