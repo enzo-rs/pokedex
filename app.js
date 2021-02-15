@@ -6,6 +6,12 @@ console.log(containers);
 
 
 
+//
+let prev;
+let next;
+//
+
+
 
 
 function show_pokemon() {
@@ -25,7 +31,7 @@ function show_pokemon() {
             main_screen.classList.remove('hide');
 
 
-            
+
             // Modify background color start
             fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
                 .then(function (response) {
@@ -161,24 +167,54 @@ class PokemonObject {
 
 
 
+// Next and Prev Buttons start
+function buttons(new_prev, new_next) {
+    
+    
+    
+
+    
+
+    // if (new_next !== null) {
+    //     nextButton.addEventListener('click', () => {
+    //         printPokemons(new_next)
+    //     })
+    //     console.log(new_next);
+    // }
+   
+
+}
 
 
 
 
 
+// Next and Prev Buttons end
 
 
 
-fetch('https://pokeapi.co/api/v2/pokemon/')
+
+function printPokemons(url) {
+    fetch(url)
     .then(function (response) {
         if (response.status == 200) {
             response.json()
                 .then(function (data) {
 
                     let pokemon_tab = data.results;
+                    
                     let pokemonObj = new PokemonObject(pokemon_tab);
                     pokemonObj.createPokemons()
+
+
+                    prev = data.previous;
+                    next = data.next;
+                    let old_prev;
+                    let old_next;
+
+                    buttons(prev, next);
                     show_pokemon()
+                    
 
                 })
                 .catch(function (error) {
@@ -189,3 +225,21 @@ fetch('https://pokeapi.co/api/v2/pokemon/')
     .catch(function (error) {
         console.log(error);
     })
+}
+
+prevButton.addEventListener('click', () => {
+    if (prev !== null) {
+        printPokemons(prev);
+    }
+});
+
+
+nextButton.addEventListener('click', () => {
+    if (next !== null) {
+        printPokemons(next);
+    }
+});
+
+
+
+printPokemons('https://pokeapi.co/api/v2/pokemon?offset=0&limit=20');
