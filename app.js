@@ -1,7 +1,6 @@
 let containers = document.querySelectorAll('.list-item');
 let prevButton = document.querySelector('.left-button');
 let nextButton = document.querySelector('.right-button');
-console.log(containers);
 
 
 
@@ -24,7 +23,6 @@ function show_pokemon() {
     let type_one = pokemon_desc.querySelector('.poke-type-one');
     let type_two = pokemon_desc.querySelector('.poke-type-two');
 
-    console.log(stats_weight);
     let old_type;
     let new_type;
     containers.forEach((e) => {
@@ -32,8 +30,9 @@ function show_pokemon() {
             let pointIndex = e.textContent.indexOf('.');
             let name = e.textContent.slice(pointIndex + 1);
             let id = e.textContent.slice(0, pointIndex);
+            const finalId = idShape(id);
             header_desc.querySelector('.poke-name').textContent = name;
-            header_desc.querySelector('.poke-id').textContent = id;
+            header_desc.querySelector('.poke-id').textContent = finalId;
             main_screen.classList.remove('hide');
 
 
@@ -81,6 +80,20 @@ function show_pokemon() {
 
                                 // Add types end
 
+
+                                // Add images start
+                                let image_container = pokemon_desc.querySelector('.screen__image');
+                                let back_image  = data.sprites['back_default'];
+                                let front_image = data.sprites['front_default'];
+
+                                image_container.querySelector('.poke-front-image').setAttribute('src', front_image);
+                                image_container.querySelector('.poke-back-image').setAttribute('src', back_image);
+
+                                
+
+
+                                // Add images end
+
                             })
                     }
                 })
@@ -101,7 +114,12 @@ function show_pokemon() {
 }
 
 
-
+function idShape(id) {
+    let shape = "#000";
+    let idStr = id.toString()
+    let finalID = shape.slice(0, 4-idStr.length) + id;
+    return finalID;
+}
 
 
 // function createPokemons() {
@@ -184,7 +202,7 @@ class PokemonObject {
                                 let pokeName = `${id}. ${name}`;
                                 containers[i].innerHTML = pokeName;
 
-
+                                
 
                             })
                     }
@@ -259,6 +277,8 @@ function printPokemons(url) {
             console.log(error);
         })
 }
+
+
 
 prevButton.addEventListener('click', () => {
     if (prev !== null) {
