@@ -435,3 +435,16 @@ body {
 .fairy {
   background: #F9AEFF;
 }
+
+
+.gold {
+  background: gold;
+}
+
+.gold_gradient {
+  background : linear-gradient(90deg, rgba(159,135,0,1) 0%, rgba(253,215,0,1) 50%, rgba(159,135,0,1) 100%);
+}
+
+.selection {
+  border:black 1px solid;
+}

@@ -1,19 +1,10 @@
 let containers = document.querySelectorAll('.list-item');
 let prevButton = document.querySelector('.left-button');
 let nextButton = document.querySelector('.right-button');
-
-
-
-
-//
 let prev;
 let next;
-//
 
-
-
-
-function show_pokemon() {
+function show_pokemon(def_front, def_back) {
     let pokemon_desc = document.querySelector('.main-section__black');
     let header_desc = pokemon_desc.querySelector('.screen__header');
     let main_screen = pokemon_desc.querySelector('.main-screen');
@@ -36,7 +27,6 @@ function show_pokemon() {
             main_screen.classList.remove('hide');
 
 
-
             // Modify background color start
             fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
                 .then(function (response) {
@@ -53,13 +43,13 @@ function show_pokemon() {
                                     main_screen.classList.add(new_type);
                                     main_screen.classList.remove(old_type);
                                 }
-
+                                // Modify background color end
 
                                 // Add weight and height start
                                 let weight = data.weight;
                                 let height = data.height;
-                                stats_weight.innerHTML = `weight: ${weight}`
-                                stats_height.innerHTML = `height: ${height}`
+                                stats_weight.querySelector('.poke-weight').innerHTML = `${weight}`
+                                stats_height.querySelector('.poke-height').innerHTML = `${height}`
                                 // Add weight and height end
 
 
@@ -67,31 +57,26 @@ function show_pokemon() {
                                 if (type_two.classList.contains('hide')) {
                                     type_two.classList.remove('hide')
                                 }
-                                let type1 = data.types[0].type.name;
-                                type_one.textContent = type1;
+                                let typea = data.types[0].type.name;
+                                type_one.textContent = typea;
 
 
                                 if (data.types.length === 2) {
-                                    let type2 = data.types[1].type.name;
-                                    type_two.textContent = type2;
+                                    let typeb = data.types[1].type.name;
+                                    type_two.textContent = typeb;
                                 } else {
                                     type_two.classList.add('hide')
                                 }
-
                                 // Add types end
 
 
                                 // Add images start
                                 let image_container = pokemon_desc.querySelector('.screen__image');
-                                let back_image  = data.sprites['back_default'];
-                                let front_image = data.sprites['front_default'];
+                                let back_image = data.sprites[`${def_front}`];
+                                let front_image = data.sprites[`${def_back}`];
 
                                 image_container.querySelector('.poke-front-image').setAttribute('src', front_image);
                                 image_container.querySelector('.poke-back-image').setAttribute('src', back_image);
-
-                                
-
-
                                 // Add images end
 
                             })
@@ -100,15 +85,6 @@ function show_pokemon() {
                 .catch(function (error) {
                     console.log(error);
                 })
-
-            // Modify background color end
-
-
-
-
-
-
-
         });
     })
 }
@@ -117,66 +93,9 @@ function show_pokemon() {
 function idShape(id) {
     let shape = "#000";
     let idStr = id.toString()
-    let finalID = shape.slice(0, 4-idStr.length) + id;
+    let finalID = shape.slice(0, 4 - idStr.length) + id;
     return finalID;
 }
-
-
-// function createPokemons() {
-
-
-//     fetch('https://pokeapi.co/api/v2/pokemon/')
-//         .then(function (response) {
-//             if (response.status == 200) {
-//                 response.json()
-//                     .then(function (data) {
-//                         // console.log(data.results);
-//                         // containers.forEach((e) => {
-
-//                         // })
-//                         let pokemon_tab = data.results;
-//                         console.log(pokemon_tab);
-//                         for (let i = 0; i < containers.length; i++) {
-//                             const element = pokemon_tab[i];
-
-//                             let id;
-//                             let name;
-//                             let pokemon_type;
-//                             fetch(element.url)
-//                                 .then(function (response) {
-//                                     if (response.status == 200) {
-//                                         response.json()
-//                                             .then(function (data) {
-
-//                                                 id = data.id;
-
-//                                                 name = element.name.charAt(0).toUpperCase() + element.name.slice(1);
-//                                                 pokeName = `${id}. ${name}`;
-//                                                 containers[i].innerHTML = pokeName;
-
-
-//                                                 pokemon_type = data.types[0].type.name;
-//                                                 show_pokemon(pokemon_type)
-//                                             })
-//                                     }
-//                                 })
-
-
-
-
-//                         }
-//                     })
-//             }
-//         })
-// }
-
-// createPokemons()
-
-
-
-
-
-
 
 class PokemonObject {
     constructor(product) {
@@ -195,55 +114,19 @@ class PokemonObject {
                     if (response.status == 200) {
                         response.json()
                             .then(function (data) {
-
                                 id = data.id;
 
                                 name = element.name.charAt(0).toUpperCase() + element.name.slice(1);
                                 let pokeName = `${id}. ${name}`;
                                 containers[i].innerHTML = pokeName;
-
-                                
-
                             })
                     }
                 })
-
-
-
-
         }
-
     }
 }
 
-
-
-// Next and Prev Buttons start
-function buttons(new_prev, new_next) {
-
-
-
-
-
-
-    // if (new_next !== null) {
-    //     nextButton.addEventListener('click', () => {
-    //         printPokemons(new_next)
-    //     })
-    //     console.log(new_next);
-    // }
-
-
-}
-
-
-
-
-
 // Next and Prev Buttons end
-
-
-
 
 function printPokemons(url) {
     fetch(url)
@@ -251,22 +134,16 @@ function printPokemons(url) {
             if (response.status == 200) {
                 response.json()
                     .then(function (data) {
-
                         let pokemon_tab = data.results;
-
                         let pokemonObj = new PokemonObject(pokemon_tab);
                         pokemonObj.createPokemons()
-
-
                         prev = data.previous;
                         next = data.next;
                         let old_prev;
                         let old_next;
 
-                        buttons(prev, next);
-                        show_pokemon()
 
-
+                        show_pokemon("front_default", "back_default");
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -277,6 +154,7 @@ function printPokemons(url) {
             console.log(error);
         })
 }
+
 
 
 
@@ -292,7 +170,6 @@ nextButton.addEventListener('click', () => {
         printPokemons(next);
     }
 });
-
 
 
 printPokemons('https://pokeapi.co/api/v2/pokemon?offset=0&limit=20');
