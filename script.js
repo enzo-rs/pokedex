@@ -61,7 +61,7 @@ buttons_el.forEach((e) => {
     })
 })
 
-
+// KONAMI code end
 
 
 let count = 0;
@@ -90,7 +90,18 @@ left_button.addEventListener('click', () => {
     selectItem()
 })
 
-// KONAMI code end
+function selectItem() {
+    for (let i = 0; i < containers.length; i++) {
+        const element = containers[i];
+
+        if (count === i) {
+            element.classList.add('selection')
+        } else if (element.classList.contains('selection')) {
+            element.classList.remove('selection')
+        }
+    }
+}
+
 
 
 
@@ -182,86 +193,7 @@ buttonA.addEventListener('click', () => {
 
 })
 
-function selectItem() {
-    for (let i = 0; i < containers.length; i++) {
-        const element = containers[i];
-
-        if (count === i) {
-            element.classList.add('selection')
-        } else if (element.classList.contains('selection')) {
-            element.classList.remove('selection')
-        }
-    }
-}
 
 
 
-function test(def_front, def_back) {
-    let pointIndex = e.textContent.indexOf('.');
-    let name = e.textContent.slice(pointIndex + 1);
-    let id = e.textContent.slice(0, pointIndex);
-    const finalId = idShape(id);
-    header_desc.querySelector('.poke-name').textContent = name;
-    header_desc.querySelector('.poke-id').textContent = finalId;
-    main_screen.classList.remove('hide');
 
-
-    // Modify background color start
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
-        .then(function (response) {
-            if (response.status == 200) {
-                response.json()
-                    .then(function (data) {
-
-                        let pokemon_type = data.types[0].type.name;
-                        old_type = new_type;
-                        new_type = pokemon_type;
-
-
-                        if (new_type !== old_type) {
-                            main_screen.classList.add(new_type);
-                            main_screen.classList.remove(old_type);
-                        }
-                        // Modify background color end
-
-                        // Add weight and height start
-                        let weight = data.weight;
-                        let height = data.height;
-                        stats_weight.querySelector('.poke-weight').innerHTML = `${weight}`
-                        stats_height.querySelector('.poke-height').innerHTML = `${height}`
-                        // Add weight and height end
-
-
-                        // Add types start
-                        if (type_two.classList.contains('hide')) {
-                            type_two.classList.remove('hide')
-                        }
-                        let typea = data.types[0].type.name;
-                        type_one.textContent = typea;
-
-
-                        if (data.types.length === 2) {
-                            let typeb = data.types[1].type.name;
-                            type_two.textContent = typeb;
-                        } else {
-                            type_two.classList.add('hide')
-                        }
-                        // Add types end
-
-
-                        // Add images start
-                        let image_container = pokemon_desc.querySelector('.screen__image');
-                        let back_image = data.sprites[`${def_front}`];
-                        let front_image = data.sprites[`${def_back}`];
-
-                        image_container.querySelector('.poke-front-image').setAttribute('src', front_image);
-                        image_container.querySelector('.poke-back-image').setAttribute('src', back_image);
-                        // Add images end
-
-                    })
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-}
